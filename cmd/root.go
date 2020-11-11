@@ -34,12 +34,7 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "ju",
 	Short: "자주 쓰는 유틸리티 커맨드",
-	Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Long:  "Jeeseung's Favorite command CLI",
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },

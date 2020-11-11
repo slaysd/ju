@@ -28,13 +28,8 @@ import (
 // notifyCmd represents the notify command
 var notifyCmd = &cobra.Command{
 	Use:   "notify",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Notify status of shell command",
+	Long:  `Notify status of shell command via email. You must be set smtp configuration (type 'ju notify config')`,
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
 			return fmt.Errorf("requires at least one arg")
@@ -80,14 +75,9 @@ to quickly create a Cobra application.`,
 
 var notifyConfigCmd = &cobra.Command{
 	Use:   "config",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-	Args: cobra.NoArgs,
+	Short: "Config notify sender configuration",
+	Long:  `Config notify sender configuration. You should to know smtp host, port, username, password`,
+	Args:  cobra.NoArgs,
 	Run: func(cmd *cobra.Command, args []string) {
 		var (
 			host     string
