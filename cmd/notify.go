@@ -1,5 +1,5 @@
 /*
-Copyright © 2020 NAME HERE <EMAIL ADDRESS>
+Copyright © 2020 Jeeseung Han <jeeseung.han@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,12 +17,18 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+	"os/exec"
+
+	"github.com/go-playground/validator"
 	"github.com/slaysd/ju/pkg/mail"
 	"github.com/slaysd/ju/pkg/util"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"os"
-	"os/exec"
+)
+
+var (
+	validate *validator.Validate
 )
 
 // notifyCmd represents the notify command
@@ -32,11 +38,11 @@ var notifyCmd = &cobra.Command{
 	Long:  `Notify status of shell command via email. You must be set smtp configuration (type 'ju notify config')`,
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
-			return fmt.Errorf("requires at least one arg")
+			return fmt.Errorf("Requires at least one arg")
 		}
 
 		if host, port, username, password := viper.Get("smtp.host"), viper.Get("smtp.port"), viper.Get("smtp.username"), viper.Get("smtp.password"); host == nil || port == nil || username == nil || password == nil {
-			return fmt.Errorf("requires smtp config")
+			return fmt.Errorf("Requires SMTP config, please set SMTP config via 'ju notifiy config'")
 		}
 
 		return nil
@@ -91,25 +97,46 @@ var notifyConfigCmd = &cobra.Command{
 		pre_username := viper.GetString("smtp.username")
 		pre_password := viper.GetString("smtp.password")
 
+		validate = validator.New()
+
 		fmt.Printf("SMTP Host (%s): ", pre_host)
 		if cnt, _ := fmt.Scanln(&host); cnt > 0 {
+			if err := validate.Var(host, "required,hostname"); err != nil {
+				fmt.Println(err.Error())
+				return
+			}
 			viper.Set("smtp.host", host)
 		}
+
 		fmt.Printf("SMTP Port (%d): ", pre_port)
 		if cnt, _ := fmt.Scanln(&port); cnt > 0 {
+			if err := validate.Var(port, "required"); err != nil {
+				fmt.Println(err.Error())
+				return
+			}
 			viper.Set("smtp.port", port)
 		}
 		fmt.Printf("SMTP Username (%s): ", pre_username)
 		if cnt, _ := fmt.Scanln(&username); cnt > 0 {
+			if err := validate.Var(username, "required,email"); err != nil {
+				fmt.Println(err.Error())
+				return
+			}
 			viper.Set("smtp.username", username)
 		}
 		fmt.Printf("SMTP Password (%s): ", pre_password)
 		if cnt, _ := fmt.Scanln(&password); cnt > 0 {
+			if err := validate.Var(password, "required"); err != nil {
+				fmt.Println(err.Error())
+				return
+			}
 			viper.Set("smtp.password", password)
 		}
 
 		if err := viper.WriteConfig(); err != nil {
-			fmt.Println(err)
+			fmt.Println(err.Error())
+		} else {
+			fmt.Println("Done.")
 		}
 	},
 }
