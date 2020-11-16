@@ -29,7 +29,12 @@ import (
 
 var (
 	validate *validator.Validate
+	notify   notifier
 )
+
+type notifier interface {
+	Send(title string, message string, reference string) error
+}
 
 // notifyCmd represents the notify command
 var notifyCmd = &cobra.Command{
@@ -69,13 +74,13 @@ var notifyCmd = &cobra.Command{
 			reference = err.Error()
 		}
 
-		sender := mail.MailSender{
+		notify = &mail.MailSender{
 			Host:     viper.GetString("smtp.host"),
 			Port:     viper.GetString("smtp.port"),
 			Username: viper.GetString("smtp.username"),
 			Password: viper.GetString("smtp.password"),
 		}
-		sender.Send(title, message, reference)
+		notify.Send(title, message, reference)
 	},
 }
 
@@ -92,14 +97,14 @@ var notifyConfigCmd = &cobra.Command{
 			password string
 		)
 
-		pre_host := viper.GetString("smtp.host")
-		pre_port := viper.GetInt("smtp.port")
-		pre_username := viper.GetString("smtp.username")
-		pre_password := viper.GetString("smtp.password")
+		preHost := viper.GetString("smtp.host")
+		prePort := viper.GetInt("smtp.port")
+		preUsername := viper.GetString("smtp.username")
+		prePassword := viper.GetString("smtp.password")
 
 		validate = validator.New()
 
-		fmt.Printf("SMTP Host (%s): ", pre_host)
+		fmt.Printf("SMTP Host (%s): ", preHost)
 		if cnt, _ := fmt.Scanln(&host); cnt > 0 {
 			if err := validate.Var(host, "required,hostname"); err != nil {
 				fmt.Println(err.Error())
@@ -108,7 +113,7 @@ var notifyConfigCmd = &cobra.Command{
 			viper.Set("smtp.host", host)
 		}
 
-		fmt.Printf("SMTP Port (%d): ", pre_port)
+		fmt.Printf("SMTP Port (%d): ", prePort)
 		if cnt, _ := fmt.Scanln(&port); cnt > 0 {
 			if err := validate.Var(port, "required"); err != nil {
 				fmt.Println(err.Error())
@@ -116,7 +121,7 @@ var notifyConfigCmd = &cobra.Command{
 			}
 			viper.Set("smtp.port", port)
 		}
-		fmt.Printf("SMTP Username (%s): ", pre_username)
+		fmt.Printf("SMTP Username (%s): ", preUsername)
 		if cnt, _ := fmt.Scanln(&username); cnt > 0 {
 			if err := validate.Var(username, "required,email"); err != nil {
 				fmt.Println(err.Error())
@@ -124,7 +129,7 @@ var notifyConfigCmd = &cobra.Command{
 			}
 			viper.Set("smtp.username", username)
 		}
-		fmt.Printf("SMTP Password (%s): ", pre_password)
+		fmt.Printf("SMTP Password (%s): ", prePassword)
 		if cnt, _ := fmt.Scanln(&password); cnt > 0 {
 			if err := validate.Var(password, "required"); err != nil {
 				fmt.Println(err.Error())
