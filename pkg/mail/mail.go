@@ -3,18 +3,26 @@ package mail
 import (
 	"fmt"
 	"net/smtp"
+
+	"github.com/go-playground/validator"
 )
 
-const ()
+var (
+	validate *validator.Validate
+)
 
 type MailSender struct {
-	Host     string
-	Port     string
-	Username string
-	Password string
+	Host     string `validate:"required,hostname"`
+	Port     string `validate:"required"`
+	Username string `validate:"required,email"`
+	Password string `validate:"required"`
 }
 
 func (sender *MailSender) Send(title string, message string, reference string) {
+
+	validate = validator.New()
+	validate.Struct(sender)
+
 	from := sender.Username
 	to := sender.Username
 	msg := "From: " + from + "\r\n" +
