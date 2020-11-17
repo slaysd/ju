@@ -3,9 +3,10 @@
 
 # Installation
 
-## Required
+**Required**
 - Golang
 
+**Command**
 ``` bash
 go get github.com/slaysd/ju
 go install github.com/slaysd/ju
