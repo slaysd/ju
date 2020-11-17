@@ -35,7 +35,7 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "ju",
 	Short: "자주 쓰는 유틸리티 커맨드",
-	Long:  "Jeeseung's Favorite command CLI",
+	Long:  "Jeeseung's Toolbox CLI",
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	//	Run: func(cmd *cobra.Command, args []string) { },

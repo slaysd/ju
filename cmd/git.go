@@ -27,14 +27,9 @@ import (
 
 // gitCmd represents the git command
 var gitCmd = &cobra.Command{
-	Use:   "git",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Use:       "git",
+	Short:     "Git toolbox",
+	Long:      `Git toolbox like open web browser`,
 	ValidArgs: []string{"open"},
 	Args:      cobra.OnlyValidArgs,
 	Run: func(cmd *cobra.Command, args []string) {
