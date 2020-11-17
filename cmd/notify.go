@@ -40,7 +40,7 @@ type notifier interface {
 var notifyCmd = &cobra.Command{
 	Use:   "notify",
 	Short: "Notify status of shell command",
-	Long:  `Notify status of shell command via email. You must be set smtp configuration (type 'ju notify config')`,
+	Long:  `Notify status of shell command via email. You must be set SMTP configuration (type 'ju notify config')`,
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
 			return fmt.Errorf("Requires at least one arg")
