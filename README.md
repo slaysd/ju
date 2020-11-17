@@ -1,5 +1,5 @@
-# Jeeseung's Favorite Command Cli (a.k.a ju)
-자주 사용하는 커맨드를 cli 툴로 만듦
+# Jeeseung's Toolbox CLI (a.k.a ju)
+자주 사용하는 커맨드를 CLI 툴로 만듦
 
 # Installation
 
